@@ -9,7 +9,7 @@ var config = require("./config");
 function NobleView(template, options) {
     var DATA_REGION_ATTRIBUTE = config.DATA_REGION_ATTRIBUTE;
     var DATA_OUTLET_ATTRIBUTE = config.DATA_OUTLET_ATTRIBUTE;
-    
+
     var that = this;
     options = {} || options;
     options.template = template;
@@ -25,6 +25,13 @@ function NobleView(template, options) {
         options: { value: options, enumerable: true }
     });
     // that.options = options; // Getter/Setter property.
+
+    function pluginHook(hook) {
+        var args = [].slice.call(arguments, 1);
+        plugins.forEach(function (plugin) {
+            plugin[hook].apply(plugin, args);
+        });
+    }
 
     function renderRenderables() {
         var regionMap = options.renderables;
@@ -45,7 +52,7 @@ function NobleView(template, options) {
                 regionEl.parentNode.replaceChild(renderedElement, regionEl);
             }
 
-            regions[regionName] = renderedElement;            
+            regions[regionName] = renderedElement;
         });
     }
 
@@ -54,7 +61,7 @@ function NobleView(template, options) {
             var regionEl = that.regions[regionName];
             var renderedElement = renderable.render();
             regionEl.parentNode.replaceChild(renderedElement, regionEl);
-            regions[regionName] = renderedElement;       
+            regions[regionName] = renderedElement;
             return renderedElement;
         }
 
@@ -62,22 +69,20 @@ function NobleView(template, options) {
     };
 
     that.render = function () {
-        plugins.forEach(function (plugin) {
-            plugin.beforeRender(options);
-        });
+        pluginHook("beforeRender", options)
 
         var template = options.template;
         var context = options.context;
 
         element = domify(template(context));
 
+        pluginHook("beforeRenderRenderables", element, options)
+
         if (options.renderables) {
             renderRenderables();
         }
 
-        plugins.forEach(function (plugin) {
-            plugin.render(element);
-        });
+        pluginHook("render", element, options);
 
         return element;
     };
@@ -95,17 +100,13 @@ function NobleView(template, options) {
             throw new Error("View elements must be in the DOM in order to be refreshed.");
         }
 
-        plugins.forEach(function (plugin) {
-            plugin.beforeRefresh(element, options);
-        });
+        pluginHook("beforeRefresh", element, options);
 
         var oldEl = element;
         that.render();
         oldEl.parentNode.replaceChild(element, oldEl);
 
-        plugins.forEach(function (plugin) {
-            plugin.refresh(element, options);
-        });
+        pluginHook("refresh", element, options);
 
         return that.process();
     });
@@ -115,9 +116,7 @@ function NobleView(template, options) {
             throw new Error("View elements must be in the DOM to be destroyed.");
         }
 
-        plugins.forEach(function (plugin) {
-            plugin.beforeDestory(element, options);
-        });
+        pluginHook("beforeRefresh", element, options);
 
         element.parentNode.removeChild(element);
     };
