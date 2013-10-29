@@ -11,7 +11,7 @@ function NobleView(template, options) {
     var DATA_OUTLET_ATTRIBUTE = config.DATA_OUTLET_ATTRIBUTE;
 
     var that = this;
-    options = {} || options;
+    options = options || {};
     options.template = template;
 
     var element = null;
@@ -40,7 +40,7 @@ function NobleView(template, options) {
         [].forEach.call(element.querySelectorAll("div[" + DATA_REGION_ATTRIBUTE + "]"), function (regionEl) {
             var regionName = regionEl.getAttribute(DATA_REGION_ATTRIBUTE);
 
-            if (!(regionName in regionMap) && !regionEl.hasAttribute(DATA_OUTLET_ATTRIBUTE)) {
+            if (!regionMap[regionName] && !regionEl.hasAttribute(DATA_OUTLET_ATTRIBUTE)) {
                 throw new Error('There is no region "' + regionName + '".');
             }
 

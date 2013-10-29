@@ -7,5 +7,5 @@ module.exports = {
     process: function () {},
     beforeRefresh: function () {},
     refresh: function () {},
-    beforeDestory: function () {}
+    beforeDestroy: function () {}
 };
