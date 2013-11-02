@@ -4,18 +4,9 @@ var $ = require("jquery-browserify");
 var View = require("./View");
 var makeEmitter = require("pubit-as-promised").makeEmitter;
 
-module.exports = function mixinComponent(target, template, viewModel) {
+module.exports = function mixinComponent(target, template) {
     var view = new View(template);
     var publish = makeEmitter(target, ["beforeRender", "render", "beforeRefresh", "refresh"]);
-
-    target.model = function (model) {
-        if (model === undefined) {
-            return view.options.model;
-        }
-
-        view.options.model = model;
-        return target;
-    };
 
     target.option = function (key, value) {
         if (value === undefined) {
