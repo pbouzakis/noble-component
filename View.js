@@ -1,7 +1,5 @@
 "use strict";
 
-var ko = require("knockout");
-var $ = require("jquery-browserify");
 var Q = require("q");
 var domify = require("domify");
 var config = require("./config");
@@ -35,20 +33,20 @@ function NobleView(template, options) {
 
     function renderRenderables() {
         var regionMap = options.renderables;
-        var regionNames = Object.keys(regionMap);
 
         [].forEach.call(element.querySelectorAll("div[" + DATA_REGION_ATTRIBUTE + "]"), function (regionEl) {
             var regionName = regionEl.getAttribute(DATA_REGION_ATTRIBUTE);
+            var renderedElement;
 
             if (!regionMap[regionName] && !regionEl.hasAttribute(DATA_OUTLET_ATTRIBUTE)) {
                 throw new Error('There is no region "' + regionName + '".');
             }
 
             if (regionEl.hasAttribute(DATA_OUTLET_ATTRIBUTE)) {
-                var renderedElement = regionEl;
+                renderedElement = regionEl;
             } else {
                 var renderable = regionMap[regionName];
-                var renderedElement = renderable.render();
+                renderedElement = renderable.render();
                 regionEl.parentNode.replaceChild(renderedElement, regionEl);
             }
 
@@ -65,11 +63,11 @@ function NobleView(template, options) {
             return renderedElement;
         }
 
-        throw new Error("Region does not exist: " + region);
+        throw new Error("Region does not exist: " + regionName);
     };
 
     that.render = function () {
-        pluginHook("beforeRender", options)
+        pluginHook("beforeRender", options);
 
         var template = options.template;
         var context = options.context;
@@ -125,7 +123,7 @@ function NobleView(template, options) {
     that.use = function (plugin) {
         plugins.push(plugin);
     };
-};
+}
 
 module.exports = NobleView;
 module.exports.config = config;

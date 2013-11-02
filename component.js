@@ -50,7 +50,7 @@ module.exports = function mixinComponent(target, template) {
         return view.refresh().then(function (element) {
             publish("refresh", element);
         });
-    }
+    };
 
     target.region = function (region, renderable) {
         view.renderRegion(region, renderable);
