@@ -1,6 +1,5 @@
 "use strict";
 
-var $ = require("jquery-browserify");
 var View = require("./View");
 var makeEmitter = require("pubit-as-promised").makeEmitter;
 
@@ -19,15 +18,16 @@ module.exports = function mixinComponent(target, template) {
 
     target.mixins = function (mixin) {
         // All components come w/ showable mixin (Only supported mixin via option)
-        // Next step is that mixins can be an array
-        if (mixin === "showable") {
-            target.show = function () {
-                $(target.element).show();
-            };
+        // Next step is that mixins can be an arra
+        function setDisplay(display) {
+            if (target.element) {
+                target.element.style.display = display;
+            }
+        }
 
-            target.hide = function () {
-                $(target.element).hide();
-            };
+        if (mixin === "showable") {
+            target.show = setDisplay.bind(target, "block"); // Assume we are show block elements.
+            target.hide = setDisplay.bind(target, "none");
         }
 
         return target;
