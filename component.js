@@ -63,5 +63,7 @@ module.exports = function mixinComponent(target, template) {
         return target;
     };
 
+    target.process = view.process;
+
     return target;
 };
