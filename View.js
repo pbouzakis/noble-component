@@ -72,7 +72,8 @@ function NobleView(template, options) {
         var template = options.template;
         var context = options.context;
 
-        element = domify(template(context));
+        element = options.element || domify(template(context));
+        delete options.element;
 
         pluginHook("beforeRenderRenderables", element, options)
 
