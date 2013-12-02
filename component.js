@@ -5,7 +5,8 @@ var makeEmitter = require("pubit-as-promised").makeEmitter;
 
 module.exports = function mixinComponent(target, template) {
     var view = new View(template);
-    var publish = makeEmitter(target, ["beforeRender", "render", "beforeRefresh", "refresh"]);
+    var events = ["beforeRender", "render", "beforeRefresh", "refresh"];
+    var publish = makeEmitter(target, events);
 
     target.option = function (key, value) {
         if (value === undefined) {
@@ -13,6 +14,11 @@ module.exports = function mixinComponent(target, template) {
         }
 
         view.options[key] = value;
+        return target;
+    };
+
+    target.events = function () {
+        events.push.apply(events, [].slice.call(arguments));
         return target;
     };
 
@@ -58,12 +64,13 @@ module.exports = function mixinComponent(target, template) {
     };
 
     var on = target.on;
-    target.on = function (eventName, handler) {
-        on(eventName, handler.bind(target));
+    target.on = function (event, handler) {
+        on(event, handler.bind(target));
         return target;
     };
 
     target.process = view.process;
+    target.publish = publish;
 
     return target;
 };
