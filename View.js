@@ -107,7 +107,7 @@ function NobleView(template, options) {
 
         pluginHook("refresh", element, options);
 
-        return that.process();
+        return that.process().thenResolve(element);
     });
 
     that.destroy = function() {
