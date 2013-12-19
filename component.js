@@ -48,10 +48,9 @@ module.exports = function mixinComponent(target, template) {
 
     target.refresh = function () {
         var args = [].slice.call(arguments);
-        args.unshift("beforeRefresh");
         args.push(view.options);
 
-        publish.apply(target, args);
+        publish.apply(target, ["beforeRefresh"].concat(args));
 
         return view.refresh().then(function (element) {
             target.element = element;
