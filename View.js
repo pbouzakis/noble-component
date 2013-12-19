@@ -115,7 +115,7 @@ function NobleView(template, options) {
             throw new Error("View elements must be in the DOM to be destroyed.");
         }
 
-        pluginHook("beforeRefresh", element, options);
+        pluginHook("beforeDestroy", element, options);
 
         element.parentNode.removeChild(element);
     };

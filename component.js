@@ -70,6 +70,7 @@ module.exports = function mixinComponent(target, template) {
         return target;
     };
 
+    target.destroy = view.destroy;
     target.process = view.process;
     target.publish = publish;
 
