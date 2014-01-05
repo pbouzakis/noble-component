@@ -57,7 +57,7 @@ function NobleView(template, options) {
     that.renderRegion = function (regionName, renderable) {
         if (regionName in regions) {
             var regionEl = that.regions[regionName];
-            var renderedElement = renderable.render();
+            var renderedElement = renderable.element || renderable.render();
             regionEl.parentNode.replaceChild(renderedElement, regionEl);
             regions[regionName] = renderedElement;
             return renderedElement;
