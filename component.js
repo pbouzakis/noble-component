@@ -55,6 +55,7 @@ module.exports = function mixinComponent(target, template) {
         return view.refresh().then(function (element) {
             target.element = element;
             publish.apply(target, ["refresh", element].concat(args));
+            return element;
         });
     };
 
