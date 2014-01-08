@@ -39,7 +39,7 @@ function NobleView(template, options) {
             var renderedElement;
 
             if (!regionMap[regionName] && !regionEl.hasAttribute(DATA_OUTLET_ATTRIBUTE)) {
-                throw new Error('There is no region "' + regionName + '".');
+                throw new Error("There is no region \"" + regionName + "\".");
             }
 
             if (regionEl.hasAttribute(DATA_OUTLET_ATTRIBUTE)) {
@@ -82,7 +82,7 @@ function NobleView(template, options) {
         element = options.element || domify(template(context));
         delete options.element;
 
-        pluginHook("beforeRenderRenderables", element, options)
+        pluginHook("beforeRenderRenderables", element, options);
 
         if (options.renderables) {
             renderRenderables();
