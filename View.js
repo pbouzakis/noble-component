@@ -48,6 +48,9 @@ function NobleView(template, options) {
                 var renderable = regionMap[regionName];
                 renderedElement = renderable.render();
                 regionEl.parentNode.replaceChild(renderedElement, regionEl);
+
+                var pluginEvent = { name: regionName, renderable: renderable, element: renderedElement };
+                pluginHook("renderRegion", pluginEvent, options, regions);
             }
 
             regions[regionName] = renderedElement;
@@ -59,6 +62,10 @@ function NobleView(template, options) {
             var regionEl = that.regions[regionName];
             var renderedElement = renderable.element || renderable.render();
             regionEl.parentNode.replaceChild(renderedElement, regionEl);
+
+            var pluginEvent = { name: regionName, renderable: renderable, element: renderedElement };
+            pluginHook("renderRegion", pluginEvent, options, regions);
+
             regions[regionName] = renderedElement;
             return renderedElement;
         }
