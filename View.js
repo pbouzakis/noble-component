@@ -98,7 +98,7 @@ function NobleView(template, options) {
             return Q.when(plugin.process(element));
         });
 
-        return Q.all(promises);
+        return Q.all(promises).thenResolve(element);
     };
 
     that.refresh = Q.fbind(function () {
