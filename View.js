@@ -57,6 +57,32 @@ function NobleView(template, options) {
         });
     }
 
+    // Code block to keep renderables in sync when refreshed.
+    var regionRenderables = {};
+
+    function resetRegionRenderablesRefreshHandler(regionName, renderable) {
+        if (regionRenderables[regionName]) {
+            var regionInfo = regionRenderables[regionName];
+            regionInfo.renderable.off("refresh", regionInfo.onRefresh);
+        }
+    }
+
+    function keepRegionInSyncWithRenderableRefresh(regionName, renderable) {
+        resetRegionRenderablesRefreshHandler(regionName);
+
+        function updateRegionOnRefresh(newElement) {
+            regions[regionName] = newElement;
+        }
+
+        regionRenderables[regionName] = {
+            renderable: renderable,
+            onRefresh: updateRegionOnRefresh
+        };
+
+        renderable.on("refresh", updateRegionOnRefresh);
+    }
+    // End Code block.
+
     that.renderRegion = function (regionName, renderable) {
         if (regionName in regions) {
             var regionEl = that.regions[regionName];
@@ -67,6 +93,8 @@ function NobleView(template, options) {
             pluginHook("renderRegion", pluginEvent, options, regions);
 
             regions[regionName] = renderedElement;
+
+            keepRegionInSyncWithRenderableRefresh(regionName, renderable);
             return renderedElement;
         }
 
