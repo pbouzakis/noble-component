@@ -40,9 +40,9 @@ module.exports = function mixinComponent(target, template) {
     };
 
     target.render = function () {
-        publish("beforeRender", view.options);
+        target.publish("beforeRender", view.options);
         target.element = view.render();
-        publish("render", target.element);
+        target.publish("render", target.element);
         return target.element;
     };
 
@@ -50,11 +50,11 @@ module.exports = function mixinComponent(target, template) {
         var args = [].slice.call(arguments);
         args.push(view.options);
 
-        publish.apply(target, ["beforeRefresh"].concat(args));
+        target.publish.apply(target, ["beforeRefresh"].concat(args));
 
         return view.refresh().then(function (element) {
             target.element = element;
-            publish.apply(target, ["refresh", element].concat(args));
+            target.publish.apply(target, ["refresh", element].concat(args));
             return element;
         });
     };
