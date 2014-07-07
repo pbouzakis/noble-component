@@ -158,7 +158,9 @@ function NobleView(template, options) {
 
         pluginHook("beforeDestroy", element, options);
 
-        element.parentNode.removeChild(element);
+        if (element.parentNode) { // Removal might have been handled by plugin.
+            element.parentNode.removeChild(element);
+        }
     };
 
     // Register plugins with the view.
