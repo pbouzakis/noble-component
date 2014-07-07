@@ -8,5 +8,6 @@ module.exports = {
     process: function () {},
     beforeRefresh: function () {},
     refresh: function () {},
+    dispose: function () {},
     beforeDestroy: function () {}
 };

@@ -145,10 +145,16 @@ function NobleView(template, options) {
         return that.process().thenResolve(element);
     });
 
+    that.dispose = function () {
+        pluginHook("dispose", element, options);
+    };
+
     that.destroy = function() {
         if (!element || !element.parentNode) {
             throw new Error("View elements must be in the DOM to be destroyed.");
         }
+
+        that.dispose();
 
         pluginHook("beforeDestroy", element, options);
 
