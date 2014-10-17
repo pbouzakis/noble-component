@@ -146,21 +146,23 @@ function NobleView(template, options) {
     });
 
     that.dispose = function () {
+        element = null;
         pluginHook("dispose", element, options);
     };
 
     that.destroy = function() {
-        if (!element || !element.parentNode) {
-            throw new Error("View elements must be in the DOM to be destroyed.");
+        if (!element) {
+            console.warn("View elements must be in the DOM to be destroyed.");
+            return;
         }
-
-        that.dispose();
 
         pluginHook("beforeDestroy", element, options);
 
         if (element.parentNode) { // Removal might have been handled by plugin.
             element.parentNode.removeChild(element);
         }
+
+        that.dispose();
     };
 
     // Register plugins with the view.
