@@ -60,7 +60,7 @@ function NobleView(template, options) {
     // Code block to keep renderables in sync when refreshed.
     var regionRenderables = {};
 
-    function resetRegionRenderablesRefreshHandler(regionName, renderable) {
+    function resetRegionRenderablesRefreshHandler(regionName) {
         if (regionRenderables[regionName]) {
             var regionInfo = regionRenderables[regionName];
             regionInfo.renderable.off("refresh", regionInfo.onRefresh);
