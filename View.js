@@ -146,7 +146,6 @@ function NobleView(template, options) {
     });
 
     that.dispose = function () {
-        element = null;
         pluginHook("dispose", element, options);
     };
 
