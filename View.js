@@ -60,6 +60,13 @@ function NobleView(template, options) {
     // Code block to keep renderables in sync when refreshed.
     var regionRenderables = {};
 
+    function createRegionOutletEl(regionName) {
+        var outletEl = document.createElement("div");
+        outletEl.setAttribute(DATA_OUTLET_ATTRIBUTE, DATA_OUTLET_ATTRIBUTE);
+        outletEl.setAttribute(DATA_REGION_ATTRIBUTE, regionName);
+        return outletEl;
+    }
+
     function resetRegionRenderablesRefreshHandler(regionName) {
         if (regionRenderables[regionName]) {
             var regionInfo = regionRenderables[regionName];
@@ -67,11 +74,23 @@ function NobleView(template, options) {
         }
     }
 
-    function keepRegionInSyncWithRenderableRefresh(regionName, renderable) {
+    function keepRegionInSyncWithRenderable(regionName, renderable) {
         resetRegionRenderablesRefreshHandler(regionName);
 
         function updateRegionOnRefresh(newElement) {
             regions[regionName] = newElement;
+        }
+
+        // Hook into `beforeDestroy` so we can still have an element mapped to the region.
+        // After destroy the region still needs an element in the DOM so we have something to swap
+        // with on future `renderRegion` calls.
+        function resetRegionOnDestroy() {
+            var elementInRegion = renderable.element;
+            var outletEl = createRegionOutletEl(regionName);
+
+            // Swap element to be destroyed with placeholder outlet.
+            elementInRegion.parentNode.replaceChild(outletEl, elementInRegion);
+            regions[regionName] = outletEl;
         }
 
         regionRenderables[regionName] = {
@@ -80,6 +99,7 @@ function NobleView(template, options) {
         };
 
         renderable.on("refresh", updateRegionOnRefresh);
+        renderable.once("beforeDestroy", resetRegionOnDestroy);
     }
     // End Code block.
 
@@ -94,7 +114,7 @@ function NobleView(template, options) {
 
             regions[regionName] = renderedElement;
 
-            keepRegionInSyncWithRenderableRefresh(regionName, renderable);
+            keepRegionInSyncWithRenderable(regionName, renderable);
             return renderedElement;
         }
 
