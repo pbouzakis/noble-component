@@ -1,6 +1,6 @@
 {
   "name": "noble-component",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "JS, CSS, HTML UI Component Modules",
   "main": "component.js",
   "scripts": {
@@ -8,9 +8,9 @@
   },
   "dependencies": {
     "q": "~0.9.7",
-    "underscore": "~1.5.2",
-    "pubit-as-promised": "~1.0.0",
-    "domify": "~1.0.0"
+    "underscore": "~1.7.0",
+    "pubit-as-promised": "~1",
+    "domify": "~1"
   },
   "repository": "",
   "author": "pbo",
