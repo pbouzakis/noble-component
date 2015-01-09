@@ -88,9 +88,11 @@ function NobleView(template, options) {
             var elementInRegion = renderable.element;
             var outletEl = createRegionOutletEl(regionName);
 
-            // Swap element to be destroyed with placeholder outlet.
-            elementInRegion.parentNode.replaceChild(outletEl, elementInRegion);
-            regions[regionName] = outletEl;
+            // Guard against DOM updates where the element is no longer attached.
+            if (elementInRegion.parentNode) {
+                elementInRegion.parentNode.replaceChild(outletEl, elementInRegion);
+                regions[regionName] = outletEl;
+            }
         }
 
         regionRenderables[regionName] = {
